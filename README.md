@@ -1,5 +1,7 @@
 # fanfed
 
+[![CI](https://github.com/Netdoc64/fanfed/actions/workflows/ci.yml/badge.svg)](https://github.com/Netdoc64/fanfed/actions/workflows/ci.yml)
+
 Föderierte Creator-Abo-Plattform: Creator betreiben ihre eigene Instanz,
 öffentliche Teaser laufen über ActivityPub ins Fediverse, Bezahlinhalte bleiben
 verschlüsselt auf der Instanz und werden nur gegen ein gültiges Abo ausgeliefert.
