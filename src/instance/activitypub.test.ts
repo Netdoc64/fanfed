@@ -37,3 +37,5 @@ describe('buildWebfinger / buildActor', () => {
     expect(actor.inbox).toBe('https://example.test/users/anna/inbox');
   });
 });
+
+describe('Gegenprobe', () => { it('ist absichtlich rot', () => { expect(1).toBe(2); }); });
