@@ -1,0 +1,22 @@
+{
+  "name": "fanfed",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Föderierte Creator-Abo-Plattform auf ActivityPub",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261024.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7",
+    "wrangler": "^4.152.0"
+  }
+}

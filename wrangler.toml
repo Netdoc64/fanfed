@@ -1,0 +1,9 @@
+# Eine Creator-Instanz. Kein account_id und keine Bindings hier:
+# Konto, D1 und R2 kommen erst, wenn Phase 0 (Recht, Zahlung) entschieden ist.
+# Geheimnisse gehören nie in diese Datei, auch nicht als Platzhalter.
+name = "fanfed-instance"
+main = "src/instance/index.ts"
+compatibility_date = "2026-10-01"
+
+[vars]
+INSTANCE_DOMAIN = "localhost:8787"
