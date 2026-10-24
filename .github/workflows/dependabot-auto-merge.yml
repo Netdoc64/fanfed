@@ -1,0 +1,20 @@
+name: Dependabot Auto-Merge
+
+# Setzt jede Dependabot-PR auf Auto-Merge. Gemergt wird erst, wenn die
+# Pflichtprüfung `test` aus dem Ruleset grün ist — eine rote CI bleibt offen.
+on:
+  pull_request:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
