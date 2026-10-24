@@ -26,6 +26,18 @@ nie nur per `console.error`.
 
 `1.234,50 €` — Komma, Tausenderpunkt, Leerzeichen vor dem €.
 
+## Mergen
+
+Pflicht ist nur die Prüfung `test` (Ruleset auf `main`). Gemergt wird mit
+
+```bash
+node scripts/merge-pr.mjs <nr>
+```
+
+Das Skript wartet auf `test`, mergt per Squash und gibt nur dann 0 zurück, wenn
+die PR wirklich gemergt ist. Nicht `gh pr merge --auto` als Ersatz nehmen: das
+kehrt sofort mit 0 zurück. Dependabot-PRs setzt ein Workflow selbst auf Auto-Merge.
+
 ## Testen
 
 Vitest, Test liegt neben dem Code (`foo.ts` → `foo.test.ts`). Neue Logik bringt
