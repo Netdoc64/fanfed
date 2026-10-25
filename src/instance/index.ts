@@ -1,7 +1,10 @@
-import { getCreatorByHandle, type DbEnv } from '../db';
+import { getCreatorByHandle } from '../db';
+import { handleMediaRequest, type MediaDeliveryEnv } from '../media';
+import { buildOutbox, listPublicPosts } from '../posts';
 import { buildActor, buildWebfinger, isValidHandle, parseWebfingerResource } from './activitypub';
 
-export interface Env extends DbEnv {
+/** DB, MEDIA und die Schlüsselnamen (MEDIA_WRAP_KEY, SUBSCRIPTION_TOKEN_KEY) kommen aus den Bindings bzw. Secrets; Werte stehen nie in wrangler.toml. */
+export interface Env extends MediaDeliveryEnv {
   INSTANCE_DOMAIN: string;
 }
 
@@ -28,6 +31,15 @@ export default {
       }
       return json(buildWebfinger(domain, handle), 'application/jrd+json');
     }
+
+    const outbox = /^\/users\/([^/]+)\/outbox$/.exec(url.pathname);
+    if (outbox?.[1] && isValidHandle(outbox[1])) {
+      const creator = await getCreatorByHandle(env.DB, outbox[1]);
+      if (!creator) return json({ error: 'NOT_FOUND' }, 'application/json', 404);
+      return json(buildOutbox(domain, creator.handle, await listPublicPosts(env.DB, creator.id)), AP_JSON);
+    }
+
+    if (url.pathname.startsWith('/media/')) return handleMediaRequest(request, env);
 
     const actor = /^\/users\/([^/]+)$/.exec(url.pathname);
     if (actor?.[1] && isValidHandle(actor[1])) {
