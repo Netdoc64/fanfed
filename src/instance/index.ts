@@ -1,6 +1,7 @@
+import { getCreatorByHandle, type DbEnv } from '../db';
 import { buildActor, buildWebfinger, isValidHandle, parseWebfingerResource } from './activitypub';
 
-export interface Env {
+export interface Env extends DbEnv {
   INSTANCE_DOMAIN: string;
 }
 
@@ -22,14 +23,20 @@ export default {
 
     if (url.pathname === '/.well-known/webfinger') {
       const handle = parseWebfingerResource(url.searchParams.get('resource'), domain);
-      if (!handle) return json({ error: 'NOT_FOUND' }, 'application/json', 404);
+      if (!handle || !(await getCreatorByHandle(env.DB, handle))) {
+        return json({ error: 'NOT_FOUND' }, 'application/json', 404);
+      }
       return json(buildWebfinger(domain, handle), 'application/jrd+json');
     }
 
     const actor = /^\/users\/([^/]+)$/.exec(url.pathname);
     if (actor?.[1] && isValidHandle(actor[1])) {
-      // Platzhalter, bis Profile aus D1 kommen (Phase 1).
-      return json(buildActor(domain, { handle: actor[1], displayName: actor[1], summary: '' }), AP_JSON);
+      const creator = await getCreatorByHandle(env.DB, actor[1]);
+      if (!creator) return json({ error: 'NOT_FOUND' }, 'application/json', 404);
+      return json(
+        buildActor(domain, { handle: creator.handle, displayName: creator.anzeigename, summary: creator.beschreibung }),
+        AP_JSON,
+      );
     }
 
     return json({ error: 'NOT_FOUND' }, 'application/json', 404);
