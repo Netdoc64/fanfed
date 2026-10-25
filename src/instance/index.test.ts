@@ -1,6 +1,9 @@
 import { afterEach, expect, it } from 'vitest';
 import { createCreator } from '../db';
 import { createTestDb, type TestDb } from '../db/testing';
+import { generateWrapKey } from '../media';
+import { createFakeR2 } from '../media/testing';
+import { generateTokenKey } from '../subscription';
 import worker, { type Env } from './index';
 
 let t: TestDb;
@@ -9,7 +12,13 @@ afterEach(() => t?.close());
 async function setup() {
   t = createTestDb();
   await createCreator(t.db, { handle: 'anna', anzeigename: 'Anna', beschreibung: 'Hallo zusammen' });
-  const env: Env = { DB: t.db, INSTANCE_DOMAIN: 'example.test' };
+  const env: Env = {
+    DB: t.db,
+    MEDIA: createFakeR2(),
+    MEDIA_WRAP_KEY: generateWrapKey(),
+    SUBSCRIPTION_TOKEN_KEY: generateTokenKey(),
+    INSTANCE_DOMAIN: 'example.test',
+  };
   const get = (path: string) => worker.fetch(new Request(`https://example.test${path}`), env);
   return get;
 }
