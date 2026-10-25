@@ -1,5 +1,6 @@
-# Eine Creator-Instanz. Kein account_id und keine Bindings hier:
-# Konto, D1 und R2 kommen erst, wenn Phase 0 (Recht, Zahlung) entschieden ist.
+# Eine Creator-Instanz. Kein account_id hier: Konto, echte D1- und R2-Namen
+# kommen erst, wenn Phase 0 (Recht, Zahlung) entschieden ist.
+# Die Werte unten sind Platzhalter, keine echten Kennungen.
 # Geheimnisse gehören nie in diese Datei, auch nicht als Platzhalter.
 name = "fanfed-instance"
 main = "src/instance/index.ts"
@@ -7,3 +8,13 @@ compatibility_date = "2026-10-01"
 
 [vars]
 INSTANCE_DOMAIN = "localhost:8787"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "fanfed-instance"
+database_id = "PLATZHALTER-erst-nach-phase-0"  # erst nach Phase 0
+migrations_dir = "migrations"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "PLATZHALTER-erst-nach-phase-0"  # erst nach Phase 0
